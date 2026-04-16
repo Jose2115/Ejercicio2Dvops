@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora - Jose Miguel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Estilo para ocultar la sección inicialmente */
+        #datos-personales {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center; padding: 20px;">
+        <img src="{{ url_for('static', filename='foto.jpg') }}" alt="Logo TecMilenio" width="250">
+        
+        <h1>Jose Miguel</h1>
+        <p>AL07102980@tecmilenio.mx</p>
+
+        <button id="btn-mostrar" onclick="toggleDatos()" style="padding: 10px 20px; cursor: pointer;">
+            Ver Matrícula y Foto
+        </button>
+
+        <div id="datos-personales">
+            <h3>Matrícula: AL07102980</h3>
+            <img src="{{ url_for('static', filename='Perfil.jpg') }}" alt="Mi Foto" width="150" style="border-radius: 10px;">
+            <br><br>
+            <button onclick="toggleDatos()" style="padding: 5px 10px; background-color: #f44336; color: white; border: none; cursor: pointer;">
+                Cerrar
+            </button>
+        </div>
+
+        <hr style="margin: 30px 0;">
+
+        <div class="calc-container" style="background-color: #f4f4f4; padding: 20px; border-radius: 15px; display: inline-block; width: 300px;">
+            <h2>Calculadora</h2>
+            <form method="POST">
+                <input type="number" name="val1" placeholder="Valor 1" required style="padding: 10px; width: 80%;">
+                <br><br>
+                <input type="number" name="val2" placeholder="Valor 2 (opcional)" style="padding: 10px; width: 80%;">
+                <br><br>
+                
+                <select name="operation" style="padding: 10px; width: 87%;">
+                    <option value="add">Sumar (+)</option>
+                    <option value="bin">Convertir a Binario</option>
+                    <option value="and">Operación AND (&)</option>
+                </select>
+                
+                <br><br>
+                
+                <button type="submit" style="padding: 10px 20px; background-color: #004a99; color: white; border: none; cursor: pointer; width: 87%;">
+                    Calcular
+                </button>
+            </form>
+
+            {% if result is not none %}
+                <div style="margin-top: 20px; padding: 10px; background-color: #e2f3ff; border: 1px solid #004a99;">
+                    <strong>Resultado:</strong> {{ result }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function toggleDatos() {
+            var x = document.getElementById("datos-personales");
+            var btn = document.getElementById("btn-mostrar");
+            if (x.style.display === "none" || x.style.display === "") {
+                x.style.display = "block";
+                btn.style.display = "none"; // Oculta el botón principal al abrir
+            } else {
+                x.style.display = "none";
+                btn.style.display = "inline-block"; // Muestra el botón principal al cerrar
+            }
+        }
+    </script>
+
+</body>
+</html>

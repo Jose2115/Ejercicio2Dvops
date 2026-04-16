@@ -3,24 +3,34 @@ import datetime
 
 app = Flask(__name__)
 
-def registrar_log(operacion, resultado):
+def log_change(action):
     with open("backup.log", "a") as f:
-        fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        f.write(f"[{fecha}] {operacion} | Resultado: {resultado}\n")
+        f.write(f"{datetime.datetime.now()}: {action}\n")
 
 @app.route('/', methods=['GET', 'POST'])
-def calculadora():
-    res = None
+def index():
+    result = None
     if request.method == 'POST':
-        tipo = request.form.get('tipo')
-        if tipo == 'logica':
-            v1 = request.form.get('v1') == '1'
-            v2 = request.form.get('v2') == '1'
-            op = request.form.get('op_log')
-            if op == 'AND': res = int(v1 and v2)
-            elif op == 'OR': res = int(v1 or v2)
-            registrar_log(f"Operacion Logica {op}", res)
-    return render_template('index.html', resultado=res)
+        val1 = request.form.get('val1')
+        val2 = request.form.get('val2')
+        op = request.form.get('operation')
+
+        try:
+            if op == 'add':
+                # Suma aritmética simple (Paso 2)
+                result = float(val1) + float(val2)
+            elif op == 'bin':
+                # Conversión binaria (Paso 2)
+                result = bin(int(val1))
+            elif op == 'and':
+                # Calculadora lógica (Paso 9)
+                result = int(val1) & int(val2)
+            
+            log_change(f"Calculated {op} with {val1}, {val2}")
+        except Exception as e:
+            result = f"Error: {e}"
+
+    return render_template('index.html', result=result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
